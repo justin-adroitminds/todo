@@ -59,19 +59,29 @@
     flex: 0 0 8.333333%;
     max-width: 4%;
 }
+.btn-primary{
+  font-size: 1.1em;
+    vertical-align: top;
+    border: solid 1px #999;
+    border-radius: 16px !important;
+    height: auto !important;
+}
+hr{
+  border-top: 6px solid rgba(0, 0, 0, 0.1);
+}
 </style>
 <div class="container">
-  <h2>My Task List</h2>
+  <h2>My List Name</h2>
   <div class="todos">
 
     <div>
-    <form (submit)="addTodo($event)">
+    <form *ngIf="visible" (submit)="addTodo($event)">
     <input [(ngModel)]="newTodo" (keyup.enter)="newTodo=''" class="textfield" name="newTodo" />
       <button  type="submit" [disabled]="newTodo===''">Add Todo </button>
     </form>
     </div>
     <ul>
-      <h4>Tasks Completed {{completed}}/{{todos.length}}</h4>
+      <h4>{{completed}}/{{todos.length}} Items Completed</h4>
     <li  class="col-md-12" [ngClass]="{'display': todo.completed}" *ngFor="let todo of todos; let i=index">
       <div class="row">
       <div class="col-md-1 centeralign">
@@ -81,12 +91,21 @@
       <span class="alignleft" [ngClass]="{'checked': todo.completed}" > {{ todo.newTodo }} </span>
     </div>
     <div class="col-md-6">
-      <span (click)="deleteTodo(i)" class="delete-icon"> X </span>
+      <span (click)="deleteTodo(i)" class="delete-icon"> <i class="fa fa-times-circle-o" aria-hidden="true"></i>  </span>
     </div>
   </div>
       </li>
+      <button type="button" (click)="visiblebutton(true)" class="btn btn-primary">Add New</button>
       </ul>
-
+      <div class="row">
+        <div class="col-md-6">
+          <hr>
+        </div>
+        <div class="col-md-6">
+        </div>
+      </div>
+      
+      
       <ul>
         <h4>Completed Tasks {{completed}}</h4>
         <li  class="col-md-12" [ngClass]="{'display': !todo.completed}" *ngFor="let todo of todos; let i=index">
@@ -98,7 +117,7 @@
           <span class="alignleft" [ngClass]="{'checked': todo.completed}" > {{ todo.newTodo }} </span>
         </div>
         <div class="col-md-6">
-          <span (click)="deleteTodo(i)" class="delete-icon"> X </span>
+          <span (click)="deleteTodo(i)" class="delete-icon"> <i class="fa fa-times-circle-o" aria-hidden="true"></i> </span>
         </div>
       </div>
           </li>

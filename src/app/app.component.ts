@@ -11,11 +11,13 @@ export class AppComponent {
   todos: any;
   todo: any;
   completed: any;
+  visible: any;
 
   constructor() {
     this.newTodo = '';
     this.todos = [];
     this.completed = 0;
+    this.visible = false;
   }
 
   addTodo(event): void {
@@ -24,6 +26,7 @@ export class AppComponent {
       completed: false
     };
     this.todos.push(this.todo);
+    this.visible = false;
     this.newTodo = '';
     event.preventDefault();
   }
@@ -49,5 +52,9 @@ export class AppComponent {
     }else{
       this.completed = this.completed - 1;
     }
+  }
+
+  visiblebutton(bool): void {
+    this.visible = bool;
   }
 }
