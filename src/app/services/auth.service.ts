@@ -9,7 +9,7 @@ export class AuthService {
 
   // if you turn this is authenticated to false, you wouldnt be able to reach the protected routes
   isAuthenticated(): boolean {
-  return false;
+  return true;
   }
 
   // if you change this Admin to anything else it wouldnt let u in
