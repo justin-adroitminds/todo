@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { TodoComponent } from './todo/todo.component';
 import { LoginComponent } from './login/login.component';
 
 import { RouterModule } from '@angular/router';
@@ -12,10 +11,12 @@ import { APP_ROUTES } from './app.routes';
 
 import { AuthGuard } from './auth-guard.service';
 
+import { ToDoModule } from './to-do/to-do.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @NgModule({
   declarations: [
     AppComponent,
-    TodoComponent,
     LoginComponent
   ],
   imports: [
@@ -23,7 +24,9 @@ import { AuthGuard } from './auth-guard.service';
     FormsModule,
     RouterModule.forRoot(APP_ROUTES),
     // tslint:disable-next-line: deprecation
-    HttpModule
+    HttpModule,
+    ToDoModule,
+    BrowserAnimationsModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]
