@@ -11,19 +11,21 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse applica
 
 app.use(express.static(__dirname + '/dist/my-todo-list'))
 
-app.get('/', (req,res)=>{
+app.get('/*', (req,res)=>{
     res.sendfile('./dist/my-todo-list/index.html')
 })
 
 // POST method route
 app.post('/login', function (req, res) {
-    if(req.body.username === 'justin' && req.body.password === 'password'){
+    if(req.body.email === 'admin@123.com' && req.body.password === 'password'){
         res.send({status : true})
     }else{
         res.send({status : false})
     }
     
   })
+
+  
 
 const route = express.Router()
 

@@ -20,14 +20,11 @@ export class LoginComponent {
   constructor(private AuthService1: AuthService, private router: Router) { }
 
     onSubmit(form: NgForm): void{
-      this.AuthService1.login(form.value).subscribe(
-        res => {
-          console.log(res);
-          this.router.navigateByUrl('/to-do');
-        },
-        err => {
-          this.serverErrorMessages = err.error.message;
-        }
-      );
+      if (this.AuthService1.login(form.value) === true){
+        this.router.navigateByUrl('/to-do');
+      }else{
+        this.router.navigateByUrl('/login');
+        this.serverErrorMessages = 'Incorrect Credentials';
+      }
     }
 }

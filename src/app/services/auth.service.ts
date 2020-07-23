@@ -6,23 +6,26 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  isAuthenticated: boolean;
-  constructor(private http: HttpClient, private router: Router) {
-    this.isAuthenticated = false;
-   }
+  isAuthenticated = false;
+  constructor(private http: HttpClient, private router: Router) { }
 
     // if you turn this is authenticated to false, you wouldnt be able to reach the protected routes
   login(authCredentials): any{
-    this.http.post<{message: string, error: string}>('/login', authCredentials)
+    this.http.post<{status: boolean}>('/login', authCredentials)
     .subscribe(resData => {
-      if (resData.message){
+      if (resData.status === true){
         this.isAuthenticated = true;
-        this.router.navigate(['/to-do']);
+        // console.log(this.isAuthenticated);
+        return true;
       }
-      else if (resData.error){
+      else{
+        console.log(resData.status);
         this.isAuthenticated = false;
-        this.router.navigate(['/']);
+        return false;
       }
     } );
   }
+  getisAuth(): boolean{
+    return this.isAuthenticated;
+      }
 }
