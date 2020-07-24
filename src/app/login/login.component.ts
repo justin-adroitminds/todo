@@ -16,15 +16,30 @@ export class LoginComponent {
     password: ''
   };
   serverErrorMessages: string;
+  loginReturn: boolean;
 
   constructor(private AuthService1: AuthService, private router: Router) { }
 
-    onSubmit(form: NgForm): void{
-      if (this.AuthService1.login(form.value) === true){
-        this.router.navigateByUrl('/to-do');
-      }else{
-        this.router.navigateByUrl('/login');
-        this.serverErrorMessages = 'Incorrect Credentials';
+     onSubmit(form: NgForm): void{
+       try{
+        this.AuthService1.login(form.value)
+        .then(resData => {
+          if (resData.status === true) {
+            this.router.navigate(['/to-do']);
+          }
+          else {
+            console.log(resData);
+            this.serverErrorMessages = 'Incorrect Credentials';
+            this.router.navigate(['/login']);
+          }
+        }).catch ((error) => {
+          console.log(error);
+          this.serverErrorMessages = 'Incorrect Credentials';
+          this.router.navigate(['/login']);
+        });
+       }
+       catch (error) {
+        console.log(error);
       }
     }
 }

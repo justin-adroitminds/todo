@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, resolveForwardRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -6,26 +6,27 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  isAuthenticated = false;
   constructor(private http: HttpClient, private router: Router) { }
 
     // if you turn this is authenticated to false, you wouldnt be able to reach the protected routes
   login(authCredentials): any{
-    this.http.post<{status: boolean}>('/login', authCredentials)
+   const promise = new Promise((resolve, reject) => {
+    this.http.post<{status: boolean, list: Array<string>}>('/login', authCredentials)
     .subscribe(resData => {
-      if (resData.status === true){
-        this.isAuthenticated = true;
-        // console.log(this.isAuthenticated);
-        return true;
+      if (resData.status){
+        localStorage.setItem('isAuthenticated', 'true');
+        resolve(resData);
       }
       else{
         console.log(resData.status);
-        this.isAuthenticated = false;
-        return false;
+        localStorage.setItem('isAuthenticated', 'false');
+        reject(false);
       }
     } );
+   });
+   return promise;
   }
-  getisAuth(): boolean{
-    return this.isAuthenticated;
+  getisAuth(): string{
+    return localStorage.getItem('isAuthenticated');
       }
 }
