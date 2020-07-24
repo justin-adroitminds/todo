@@ -53,6 +53,7 @@ export class LoginComponent {
 }
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'snack-bar-component-example-snack',
   templateUrl: 'snack-bar-component-example-snack.html',
   styles: [`
