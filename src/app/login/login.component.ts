@@ -32,7 +32,7 @@ export class LoginComponent {
        try{
         this.AuthService1.login(form.value)
         .then(resData => {
-          if (resData.status === true) {
+          if (resData.status) {
             this.router.navigate(['/to-do']);
           }
           else {

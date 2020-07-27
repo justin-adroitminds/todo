@@ -18,7 +18,6 @@ export class AuthService {
         resolve(resData);
       }
       else{
-        console.log(resData.status);
         localStorage.setItem('isAuthenticated', 'false');
         reject(false);
       }
@@ -28,5 +27,5 @@ export class AuthService {
   }
   getisAuth(): string{
     return localStorage.getItem('isAuthenticated');
-      }
+  }
 }
