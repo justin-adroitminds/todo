@@ -1,5 +1,6 @@
 const express = require('express')
 const http = require('http')
+const dbman = require('./dbconnect')
 
 const app = express()
 var router = new express.Router();
@@ -15,6 +16,7 @@ app.use(express.static(__dirname + '/dist/my-todo-list'))
 app.use('/',router)
 
 require('./routes/routes.js')(router);
+
 
 server.listen(3000, ()=>{
     console.log('server started')
