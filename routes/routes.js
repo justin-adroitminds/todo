@@ -84,9 +84,8 @@ router.post('/login', function (req, res) {
         newTodo : req.body.newTodo,
         completed : completed
       }
-      db.get().collection("todo").update(qry, {"$set" : update})
+      db.get().collection("todo").updateOne(qry, {"$set" : update})
       .then((list) => {
-        console.log(update)
         res.send({status : true, list : update})
       }).catch((e) =>{
         console.log(e)

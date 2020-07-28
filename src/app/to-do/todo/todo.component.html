@@ -1,16 +1,4 @@
-<mat-drawer-container class="example-container" autosize>
-<mat-drawer #drawer class="example-sidenav" mode="side">
-  <p>Auto-resizing sidenav</p>
-</mat-drawer>
-<p>
-  <mat-toolbar color="primary">
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="drawer.toggle()">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <span>My App</span>
-    <span class="example-spacer"></span>
-  </mat-toolbar>
-</p>
+
 <mat-card class="example-card">
   <mat-card-header>
     <div mat-card-avatar class="example-header-image"></div>
@@ -66,12 +54,17 @@
                 <h2 class="example-h2">{{completed}} Items Completed</h2>
                 <mat-list-item role="listitem" *ngFor="let todo of todos; let i=index"  [ngClass]="{'hide': !todo.completed}">
                   <div [ngClass]="{'display': !todo.completed}">
-                    <mat-checkbox [ngClass]="{'checked': todo.completed}" class="example-margin" (click)="updateCompleted(i)" [(ngModel)]="todo.completed" >
-                    {{ todo.newTodo }}
-                  </mat-checkbox>
+                    <div fxLayout="row" fxFlexFill>
+                      <div fxFlex fxLayoutAlign="start center">
+                        <mat-checkbox [ngClass]="{'checked': todo.completed}" class="example-margin" (click)="updateCompleted(i)" [(ngModel)]="todo.completed" >
+                        {{ todo.newTodo }}
+                        </mat-checkbox>
+                      </div>
+                      <div fxFlex  fxLayoutAlign="end center"></div>
                   <button mat-icon-button (click)="deleteTodo(todo._id)">
                     <mat-icon class="mat-24">delete</mat-icon>
                   </button>
+                  </div>
                 </div>
               </mat-list-item>
               </mat-list>
@@ -84,4 +77,3 @@
       </div>
   </mat-card-content>
 </mat-card>
-</mat-drawer-container>
