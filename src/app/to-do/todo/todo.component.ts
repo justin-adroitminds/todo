@@ -20,12 +20,22 @@ export class TodoComponent {
     this.todos = [];
     this.completed = 0;
     this.visible = false;
+    this.getList();
+  }
+
+  getList(): void{
     try{
       this.ToDoService1.getList()
       .then(resData => {
         if (resData.status) {
           console.log(resData.list);
           this.todos = resData.list;
+          this.completed = 0;
+          this.todos.forEach(to => {
+            if (to.completed){
+              this.completed += 1;
+            }
+          });
         }
         else {
           console.log(resData);
@@ -48,12 +58,10 @@ export class TodoComponent {
       this.ToDoService1.addTask(this.todo)
       .then(resData => {
         if (resData.status) {
-          console.log(resData.list);
-          this.todos = resData.list;
+          this.getList();
         }
         else {
-          console.log(resData);
-          this.todos = [];
+          this.getList();
         }
       }).catch ((error) => {
         console.log(error);
@@ -75,8 +83,7 @@ export class TodoComponent {
           if (this.completed > 0){
             this.completed = this.completed - 1;
           }
-          console.log(resData.list);
-          this.todos = resData.list;
+          this.getList();
         }
         else {
           console.log(resData);
@@ -107,11 +114,10 @@ export class TodoComponent {
     }
 
     try{
-      this.ToDoService1.updateTask(index)
+      this.ToDoService1.updateTask(this.todos[index])
       .then(resData => {
         if (resData.status) {
-          console.log(resData.list);
-          this.todos = resData.list;
+          this.getList();
         }
         else {
           console.log(resData);

@@ -1,25 +1,26 @@
-const MongoClient = require('mongodb').MongoClient;
+const mongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
  
 // Connection URL
-const url = 'mongodb://localhost:27017';
- 
-// Database Name
-const dbName = 'todo';
- 
-// Use connect method to connect to the server
-MongoClient.connect(url, function(err, client) {
-  assert.equal(null, err);
-  console.log("Connected successfully to server");
- 
-  const db = client.db(dbName);
+const mongoDbUrl = 'mongodb://localhost:27017';
+let mongodb;
 
-  const collection = db.collection('todo');
-  var cursor=db.collection('login').find({username: "admin@123.com"})
-  cursor.each(function(err, doc) {
+function connect(callback){
+    mongoClient.connect(mongoDbUrl, (err, db) => {
+        mongodb = db.db('todo');
+        callback();
+    });
+}
+function get(){
+    return mongodb;
+}
 
-    console.log(doc);
+function close(){
+    mongodb.close();
+}
 
-});
-  client.close();
-});
+module.exports = {
+    connect,
+    get,
+    close
+};

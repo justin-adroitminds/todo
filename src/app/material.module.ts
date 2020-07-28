@@ -12,6 +12,8 @@ import {MatListModule} from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import {OverlayModule} from '@angular/cdk/overlay';
 
 @NgModule({
@@ -29,6 +31,8 @@ import {OverlayModule} from '@angular/cdk/overlay';
     MatMenuModule,
     MatSidenavModule,
     MatSnackBarModule,
+    MatToolbarModule,
+    MatTooltipModule,
     OverlayModule,
   ]
 })

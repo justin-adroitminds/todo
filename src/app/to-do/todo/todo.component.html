@@ -54,7 +54,7 @@
                         </mat-checkbox>
                       </div>
                      <div fxFlex  fxLayoutAlign="end center"></div>
-                     <button class="col-6" mat-icon-button (click)="deleteTodo(i)">
+                     <button class="col-6" mat-icon-button (click)="deleteTodo(todo._id)">
                       <mat-icon class="mat-24">delete</mat-icon>
                     </button>
                   </div>
@@ -69,7 +69,7 @@
                     <mat-checkbox [ngClass]="{'checked': todo.completed}" class="example-margin" (click)="updateCompleted(i)" [(ngModel)]="todo.completed" >
                     {{ todo.newTodo }}
                   </mat-checkbox>
-                  <button mat-icon-button (click)="deleteTodo(i)">
+                  <button mat-icon-button (click)="deleteTodo(todo._id)">
                     <mat-icon class="mat-24">delete</mat-icon>
                   </button>
                 </div>

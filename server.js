@@ -1,6 +1,6 @@
 const express = require('express')
 const http = require('http')
-const dbman = require('./dbconnect')
+const db = require('./dbconnect');
 
 const app = express()
 var router = new express.Router();
@@ -14,6 +14,12 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse applica
 
 app.use(express.static(__dirname + '/dist/my-todo-list'))
 app.use('/',router)
+
+db.connect(() => {
+    app.listen(process.env.PORT || 5555, function (){
+        console.log(`Listening`);
+    });
+});
 
 require('./routes/routes.js')(router);
 
