@@ -1,5 +1,5 @@
 module.exports = function(router) {
-
+  const uniqid = require('uniqid');
   const db = require('./../dbconnect');
   var ObjectId = require('mongodb').ObjectID;
 
@@ -11,19 +11,6 @@ module.exports = function(router) {
           });
   });
 
-let todolist = [{
-    newTodo: 'Task 1',
-    completed: false
-  },
-  {
-    newTodo: 'Task 2',
-    completed: false
-  },
-  {
-    newTodo: 'Task 3',
-    completed: false
-  }
-];
 // POST method route
 router.post('/login', function (req, res) {
   db.get().collection('login').find({username : req.body.email}).toArray()
@@ -41,10 +28,24 @@ router.post('/login', function (req, res) {
   router.post('/addtask', function (req, res) {
     if(req.body.newTodo){
         let todo = {
+            id: uniqid(),
             newTodo: req.body.newTodo,
             completed: false
         };
-        db.get().collection("todo").insertOne(todo)
+        let qry = {
+          _id : ObjectId(req.body.id)
+        }
+        db.get().collection("todos").update(qry,
+              // should be important to "cast"
+          {
+             "$push": {
+                 "list": {
+                     "$each": [todo]
+                 }
+             }
+          }
+       )
+        // db.get().collection("todos").update(qry, {"$push" : {list : { "$each" : [ todo ]}}})
         .then((list) => {
           res.send({status : true, list : todo})
         }).catch((e) =>{
@@ -56,15 +57,26 @@ router.post('/login', function (req, res) {
     }
   })
 
-  router.delete('/task/:id', function (req, res) {
-      console.log(req.params.id)
+  router.delete('/task/:id/:index', function (req, res) {
     if(req.params.id){
-      let todo = {
-        _id : ObjectId(req.params.id)
+      let qry = {
+        _id : ObjectId(req.params.index)
       }
-      db.get().collection("todo").deleteOne(todo)
+      let pull = {
+        id : req.params.id
+      }
+      db.get().collection("todos").update(qry,
+        // should be important to "cast"
+      {
+        "$pull": {
+            "list": {
+                pull
+            }
+            }
+          }
+      )
       .then((list) => {
-        res.send({status : true, list : todo})
+        res.send({status : true, list : pull})
       }).catch((e) =>{
         console.log(e)
       });
@@ -95,13 +107,40 @@ router.post('/login', function (req, res) {
     }
   })
 
-  router.get('/todolist', function (req, res) {
-    db.get().collection('todo').find().toArray()
+  router.get('/todolist/:id', function (req, res) {
+    db.get().collection('todos').find({_id : ObjectId(req.params.id)}).toArray()
   .then((list) => {
           res.send({status : true, list : list})
         }).catch((e) =>{
           res.send({status : false, list : []})
         });
+  })
+
+  router.get('/todos', function (req, res) {
+    db.get().collection('todos').find().toArray()
+  .then((list) => {
+          res.send({status : true, list : list})
+        }).catch((e) =>{
+          res.send({status : false, list : []})
+        });
+  })
+
+  router.post('/addtodo', function (req, res) {
+    if(req.body.name){
+        let todo = {
+            name: req.body.name,
+            list : []
+        };
+        db.get().collection("todos").insertOne(todo)
+        .then((list) => {
+          res.send({status : true, list : todo})
+        }).catch((e) =>{
+          console.log(e)
+        });
+        // todolist.push(todo);
+    }else{
+        res.send({status : false, list : []})
+    }
   })
 
   router.get('*', (req,res)=>{

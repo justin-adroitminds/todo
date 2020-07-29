@@ -11,10 +11,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AuthGuard } from '../auth-guard.service';
 import { LayoutComponent } from './layout/layout.component';
-import { ListComponent } from './list/list.component';
+import { ListLayoutComponent, DialogComponent } from './list-layout/list-layout.component';
 
 @NgModule({
-  declarations: [TodoComponent, LayoutComponent, ListComponent],
+  declarations: [TodoComponent, LayoutComponent, ListLayoutComponent, DialogComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(TodoRoutes),

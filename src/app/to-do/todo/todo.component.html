@@ -33,7 +33,7 @@
           <mat-card-content  class="example-full-width">
             <section class="col-6"  fxLayout="row">
               <mat-list role="list">
-                <h2 class="example-h2">{{completed}}/{{todos.length}} Items Completed</h2>
+                <h2 class="example-h2">{{completed}}/{{this.length}} Items Completed</h2>
                 <mat-list-item class="col-12" role="listitem" *ngFor="let todo of todos; let i=index" [ngClass]="{'hide': todo.completed}">
                   <div fxLayout="row" fxFlexFill>
                       <div fxFlex fxLayoutAlign="start center">
@@ -42,7 +42,7 @@
                         </mat-checkbox>
                       </div>
                      <div fxFlex  fxLayoutAlign="end center"></div>
-                     <button class="col-6" mat-icon-button (click)="deleteTodo(todo._id)">
+                     <button class="col-6" mat-icon-button (click)="deleteTodo(todo.id)">
                       <mat-icon class="mat-24">delete</mat-icon>
                     </button>
                   </div>
@@ -61,7 +61,7 @@
                         </mat-checkbox>
                       </div>
                       <div fxFlex  fxLayoutAlign="end center"></div>
-                  <button mat-icon-button (click)="deleteTodo(todo._id)">
+                  <button mat-icon-button (click)="deleteTodo(todo.id)">
                     <mat-icon class="mat-24">delete</mat-icon>
                   </button>
                   </div>

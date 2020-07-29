@@ -14,6 +14,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatDialogModule} from '@angular/material/dialog';
 import {OverlayModule} from '@angular/cdk/overlay';
 
 @NgModule({
@@ -30,6 +31,7 @@ import {OverlayModule} from '@angular/cdk/overlay';
     MatListModule,
     MatMenuModule,
     MatSidenavModule,
+    MatDialogModule,
     MatSnackBarModule,
     MatToolbarModule,
     MatTooltipModule,

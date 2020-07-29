@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ToDoService } from '../to-do.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.css']
 })
-export class TodoComponent {
+export class TodoComponent implements OnInit {
 
   title = 'my-todo-list';
   newTodo: string;
@@ -14,23 +15,36 @@ export class TodoComponent {
   todo: any;
   completed: any;
   visible: any;
+  length: 0;
+  id: any;
 
-  constructor(private ToDoService1: ToDoService) {
+  constructor(private ToDoService1: ToDoService, private route: ActivatedRoute) {
     this.newTodo = '';
     this.todos = [];
     this.completed = 0;
     this.visible = false;
+    this.route.params
+          .subscribe(
+            (params) => {
+              this.id = params.id;
+              console.log(this.id);
+            }
+          );
     this.getList();
   }
 
+  ngOnInit(): void{ }
+
   getList(): void{
     try{
-      this.ToDoService1.getList()
+      this.ToDoService1.getList(this.id)
       .then(resData => {
         if (resData.status) {
-          console.log(resData.list);
-          this.todos = resData.list;
+          this.todos = resData.list[0].list;
           this.completed = 0;
+          if (this.todos.length){
+            this.length = this.todos.length;
+          }
           this.todos.forEach(to => {
             if (to.completed){
               this.completed += 1;
@@ -52,6 +66,7 @@ export class TodoComponent {
 
   addTodo(event): void {
     this.todo = {
+      id : this.id,
       newTodo: this.newTodo
     };
     try{
@@ -77,7 +92,7 @@ export class TodoComponent {
 
   deleteTodo(index): void {
     try{
-      this.ToDoService1.deleteTask(index)
+      this.ToDoService1.deleteTask(index, this.id)
       .then(resData => {
         if (resData.status) {
           if (this.completed > 0){
