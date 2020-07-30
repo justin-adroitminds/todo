@@ -128,8 +128,14 @@ export class TodoComponent implements OnInit {
       this.completed = this.completed + 1;
     }
 
+    const update = {
+      indx : index,
+      id : this.id,
+      todo : this.todos[index]
+    };
+
     try{
-      this.ToDoService1.updateTask(this.todos[index])
+      this.ToDoService1.updateTask(update)
       .then(resData => {
         if (resData.status) {
           this.getList();

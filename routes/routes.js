@@ -65,18 +65,12 @@ router.post('/login', function (req, res) {
       let pull = {
         id : req.params.id
       }
-      db.get().collection("todos").update(qry,
-        // should be important to "cast"
-      {
-        "$pull": {
-            "list": {
-                pull
-            }
-            }
-          }
-      )
+     
+      db.get().collection("todos").update(qry, 
+        {$pull: {list: pull}}, 
+        {multi: true})
       .then((list) => {
-        res.send({status : true, list : pull})
+        res.send({status : true, list : list})
       }).catch((e) =>{
         console.log(e)
       });
@@ -89,21 +83,26 @@ router.post('/login', function (req, res) {
   router.put('/updatetask/', function (req, res) {
     if(req.body){
       let qry = {
-        _id : ObjectId(req.body._id)
+        _id : ObjectId(req.body.id),
+        "list.id" : req.body.todo.id
       }
-      let completed = !req.body.completed;
-      let update = {
-        newTodo : req.body.newTodo,
-        completed : completed
-      }
-      db.get().collection("todo").updateOne(qry, {"$set" : update})
+      let completed = !req.body.todo.completed;
+
+      db.get().collection("todos").update(
+        qry,
+        { $set:
+           {
+             'list.$.completed' : completed
+           }
+        }
+     )
       .then((list) => {
-        res.send({status : true, list : update})
+        res.send({status : true, list : qry})
       }).catch((e) =>{
         console.log(e)
       });
     }else{
-        res.send({status : false, list : todolist})
+        res.send({status : false, list : []})
     }
   })
 

@@ -10,7 +10,21 @@
     </p>
     <mat-drawer-container class="example-container" autosize>
       <mat-drawer #drawer class="example-sidenav" mode="side">
-        <p>Auto-resizing sidenav</p>
+        <mat-sidenav-container class="example-container" autosize>
+          <mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true">
+            <mat-nav-list>
+              <mat-list-item  class="parent">
+                <mat-icon mat-list-icon>home</mat-icon>
+              </mat-list-item>
+              <mat-list-item  class="parent">
+                <mat-icon mat-list-icon>input</mat-icon>
+              </mat-list-item>
+            </mat-nav-list>
+            <mat-nav-list>
+        </mat-nav-list>
+          </mat-sidenav>
+        
+        </mat-sidenav-container>
       </mat-drawer>
     <router-outlet></router-outlet>
 </mat-drawer-container>
