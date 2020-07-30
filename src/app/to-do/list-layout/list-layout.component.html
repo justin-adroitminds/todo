@@ -11,7 +11,7 @@
         <mat-grid-list cols="4" rowHeight="4:4" gutterSize="10px">
             <mat-grid-tile *ngFor="let todo of todos; let i=index">
                 <mat-card>
-                    <img mat-card-image src="https://material.angularjs.org/latest/img/washedout.png" alt="Photo of a Shiba Inu">
+                    <img mat-card-image src="http://localhost:3000/images/{{todo.image}}" alt="Photo of a Shiba Inu">
                     <mat-card-header>
                         <mat-card-title>
                             <span class="md-headline">{{todo.name}}</span>

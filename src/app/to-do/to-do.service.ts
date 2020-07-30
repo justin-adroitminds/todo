@@ -87,19 +87,22 @@ export class ToDoService {
     return promise;
    }
 
-   addTodo(newTodo): any{
+   addTodo(name: string, file: File): any{
     const promise = new Promise((resolve, reject) => {
-     this.http.post<{status: boolean, list: Array<string>}>('/addtodo', newTodo)
-     .subscribe(resData => {
-       if (resData.status){
+    const formdata = new FormData();
+    formdata.append('name', name);
+    formdata.append('image', file);
+    this.http.post<{status: boolean, list: Array<string>}>('/addlist', formdata)
+    .subscribe(resData => {
+      if (resData.status){
         console.log(resData.list);
         resolve(resData);
-       }
-       else{
-         reject(false);
-       }
-     } );
-    });
+      }
+      else{
+        reject(false);
+      }
+    } );
+  });
     return promise;
    }
 }
