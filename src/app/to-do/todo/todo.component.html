@@ -18,10 +18,10 @@
             <form (submit)="addTodo($event)" class="example-form">
               <mat-card-content>
                 <mat-form-field class="example-full-width">
-                  <input matInput type="text" name="newTodo"  [(ngModel)]="newTodo" (keyup.enter)="newTodo=''">
+                  <input matInput type="text" name="title"  [(ngModel)]="title" (keyup.enter)="title=''">
                 </mat-form-field>
               </mat-card-content>
-              <button mat-raised-button color="primary" [disabled]="newTodo===''">Add Todo</button>
+              <button mat-raised-button color="primary" [disabled]="title===''">Add Todo</button>
             </form>
           </mat-card>
         </p>
@@ -38,7 +38,7 @@
                   <div fxLayout="row" fxFlexFill>
                       <div fxFlex fxLayoutAlign="start center">
                         <mat-checkbox [ngClass]="{'checked': todo.completed}" class="example-margin col-6" (click)="updateCompleted(i)" [(ngModel)]="todo.completed" >
-                          {{ todo.newTodo }}
+                          {{ todo.title }}
                         </mat-checkbox>
                       </div>
                      <div fxFlex  fxLayoutAlign="end center"></div>
@@ -57,7 +57,7 @@
                     <div fxLayout="row" fxFlexFill>
                       <div fxFlex fxLayoutAlign="start center">
                         <mat-checkbox [ngClass]="{'checked': todo.completed}" class="example-margin" (click)="updateCompleted(i)" [(ngModel)]="todo.completed" >
-                        {{ todo.newTodo }}
+                        {{ todo.title }}
                         </mat-checkbox>
                       </div>
                       <div fxFlex  fxLayoutAlign="end center"></div>

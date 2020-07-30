@@ -1,11 +1,19 @@
+<style>
+  .cdk-overlay-pane{
+    width: 300px !important;
+  }
+</style>
 <div mat-dialog-content>
   <p>What's your new Todo List?</p>
   <mat-form-field>
     <mat-label>Todo Name</mat-label>
-    <input matInput [(ngModel)]="data.name">
+    <input matInput name="name" [(ngModel)]="data.name">
   </mat-form-field>
+    <mat-label>Image</mat-label>
+    <input type="file" (change)="onFileChanged($event)">
+
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button [mat-dialog-close]="data.name" cdkFocusInitial>Ok</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
 </div>

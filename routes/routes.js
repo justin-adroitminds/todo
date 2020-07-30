@@ -1,7 +1,19 @@
 module.exports = function(router) {
+  const multer = require('multer');
+  
   const uniqid = require('uniqid');
   const db = require('./../dbconnect');
   var ObjectId = require('mongodb').ObjectID;
+
+  var storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './public/upload/');
+     },
+    filename: function (req, file, cb) {
+        cb(null , file.originalname);
+    }
+});
+var upload = multer({ storage: storage })
 
   router.get('/test', (req, res) => {
     db.get().collection('login').find({username : 'admin@123.com'}).toArray()
@@ -26,17 +38,16 @@ router.post('/login', function (req, res) {
   })
 
   router.post('/addtask', function (req, res) {
-    if(req.body.newTodo){
+    if(req.body.title){
         let todo = {
             id: uniqid(),
-            newTodo: req.body.newTodo,
+            title: req.body.title,
             completed: false
         };
         let qry = {
           _id : ObjectId(req.body.id)
         }
         db.get().collection("todos").update(qry,
-              // should be important to "cast"
           {
              "$push": {
                  "list": {
@@ -45,13 +56,11 @@ router.post('/login', function (req, res) {
              }
           }
        )
-        // db.get().collection("todos").update(qry, {"$push" : {list : { "$each" : [ todo ]}}})
         .then((list) => {
           res.send({status : true, list : todo})
         }).catch((e) =>{
           console.log(e)
         });
-        // todolist.push(todo);
     }else{
         res.send({status : false, list : []})
     }
@@ -95,8 +104,7 @@ router.post('/login', function (req, res) {
              'list.$.completed' : completed
            }
         }
-     )
-      .then((list) => {
+     ).then((list) => {
         res.send({status : true, list : qry})
       }).catch((e) =>{
         console.log(e)
@@ -118,6 +126,7 @@ router.post('/login', function (req, res) {
   router.get('/todos', function (req, res) {
     db.get().collection('todos').find().toArray()
   .then((list) => {
+
           res.send({status : true, list : list})
         }).catch((e) =>{
           res.send({status : false, list : []})
@@ -136,10 +145,27 @@ router.post('/login', function (req, res) {
         }).catch((e) =>{
           console.log(e)
         });
-        // todolist.push(todo);
     }else{
         res.send({status : false, list : []})
     }
+  })
+
+  router.post('/addlist', upload.single('image'), function (req, res) {
+    if(req.body.name){
+      let todo = {
+          name: req.body.name,
+          image: req.file.filename, 
+          list : []
+      };
+      db.get().collection("todos").insertOne(todo)
+      .then((list) => {
+        res.send({status : true, list : todo})
+      }).catch((e) =>{
+        console.log(e)
+      });
+  }else{
+      res.send({status : false, list : []})
+  }
   })
 
   router.get('*', (req,res)=>{

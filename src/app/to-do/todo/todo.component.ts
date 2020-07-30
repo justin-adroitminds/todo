@@ -9,8 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class TodoComponent implements OnInit {
 
-  title = 'my-todo-list';
-  newTodo: string;
+  title: string;
   todos: any;
   todo: any;
   completed: any;
@@ -19,7 +18,7 @@ export class TodoComponent implements OnInit {
   id: any;
 
   constructor(private ToDoService1: ToDoService, private route: ActivatedRoute) {
-    this.newTodo = '';
+    this.title = '';
     this.todos = [];
     this.completed = 0;
     this.visible = false;
@@ -67,7 +66,7 @@ export class TodoComponent implements OnInit {
   addTodo(event): void {
     this.todo = {
       id : this.id,
-      newTodo: this.newTodo
+      title: this.title
     };
     try{
       this.ToDoService1.addTask(this.todo)
@@ -86,7 +85,7 @@ export class TodoComponent implements OnInit {
       console.log(error);
     }
     this.visible = false;
-    this.newTodo = '';
+    this.title = '';
     event.preventDefault();
   }
 

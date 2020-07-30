@@ -5,6 +5,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 
 export interface DialogData {
   name: string;
+  image: File;
 }
 
 @Component({
@@ -19,6 +20,8 @@ export class ListLayoutComponent {
   todo: any;
   completed: any;
   visible: any;
+  image: File;
+
   constructor(private ToDoService1: ToDoService, public dialog: MatDialog) {
     this.name = '';
     this.todos = [];
@@ -30,22 +33,25 @@ export class ListLayoutComponent {
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '250px',
-      data: {name: this.name}
+      data: {name: this.name, image: this.image}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed ' + result);
-      this.name = result;
+      // console.log(result);
+      this.name = result.name;
+      this.image = result.image;
+      console.log(this.image);
       this.addTodo();
     });
   }
 
   addTodo(): void {
     this.todo = {
-      name: this.name
+      name: this.name,
+      image: this.image
     };
     try{
-      this.ToDoService1.addTodo(this.todo)
+      this.ToDoService1.addTodo(this.name, this.image)
       .then(resData => {
         if (resData.status) {
           this.getTodos();
@@ -95,13 +101,18 @@ export class ListLayoutComponent {
   templateUrl: 'dialog-overview-example-dialog.html',
 })
 export class DialogComponent {
-
+  image: File;
   constructor(
     public dialogRef: MatDialogRef<DialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  onFileChanged(event): void{
+    this.data.image = event.target.files[0];
+    console.log(this.image);
   }
 
 }
