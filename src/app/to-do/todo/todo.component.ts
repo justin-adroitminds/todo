@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { ToDoService } from '../to-do.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.css']
 })
-export class TodoComponent {
+export class TodoComponent implements OnInit {
 
   title = 'my-todo-list';
   newTodo: string;
@@ -13,30 +15,102 @@ export class TodoComponent {
   todo: any;
   completed: any;
   visible: any;
+  length: 0;
+  id: any;
 
-  constructor() {
+  constructor(private ToDoService1: ToDoService, private route: ActivatedRoute) {
     this.newTodo = '';
     this.todos = [];
     this.completed = 0;
     this.visible = false;
+    this.route.params
+          .subscribe(
+            (params) => {
+              this.id = params.id;
+              console.log(this.id);
+            }
+          );
+    this.getList();
+  }
+
+  ngOnInit(): void{ }
+
+  getList(): void{
+    try{
+      this.ToDoService1.getList(this.id)
+      .then(resData => {
+        if (resData.status) {
+          this.todos = resData.list[0].list;
+          this.completed = 0;
+          if (this.todos.length){
+            this.length = this.todos.length;
+          }
+          this.todos.forEach(to => {
+            if (to.completed){
+              this.completed += 1;
+            }
+          });
+        }
+        else {
+          console.log(resData);
+          this.todos = [];
+        }
+      }).catch ((error) => {
+        console.log(error);
+      });
+     }
+     catch (error) {
+      console.log(error);
+    }
   }
 
   addTodo(event): void {
     this.todo = {
-      newTodo: this.newTodo,
-      completed: false
+      id : this.id,
+      newTodo: this.newTodo
     };
-    this.todos.push(this.todo);
+    try{
+      this.ToDoService1.addTask(this.todo)
+      .then(resData => {
+        if (resData.status) {
+          this.getList();
+        }
+        else {
+          this.getList();
+        }
+      }).catch ((error) => {
+        console.log(error);
+      });
+     }
+     catch (error) {
+      console.log(error);
+    }
     this.visible = false;
     this.newTodo = '';
     event.preventDefault();
   }
 
   deleteTodo(index): void {
-    if (this.todos[index].completed){
-      this.completed = this.completed - 1;
+    try{
+      this.ToDoService1.deleteTask(index, this.id)
+      .then(resData => {
+        if (resData.status) {
+          if (this.completed > 0){
+            this.completed = this.completed - 1;
+          }
+          this.getList();
+        }
+        else {
+          console.log(resData);
+          this.todos = [];
+        }
+      }).catch ((error) => {
+        console.log(error);
+      });
+     }
+     catch (error) {
+      console.log(error);
     }
-    this.todos.splice(index, 1);
   }
 
   deleteSelectedTodos(): void {
@@ -47,15 +121,40 @@ export class TodoComponent {
     }
   }
 
-  updatecompleted(bool): void {
-    if (bool){
-      this.completed = this.completed + 1;
-    }else{
+  updateCompleted(index): void {
+    if (this.todos[index].completed){
       this.completed = this.completed - 1;
+    }else{
+      this.completed = this.completed + 1;
     }
+
+    const update = {
+      indx : index,
+      id : this.id,
+      todo : this.todos[index]
+    };
+
+    try{
+      this.ToDoService1.updateTask(update)
+      .then(resData => {
+        if (resData.status) {
+          this.getList();
+        }
+        else {
+          console.log(resData);
+          this.todos = [];
+        }
+      }).catch ((error) => {
+        console.log(error);
+      });
+     }
+     catch (error) {
+      console.log(error);
+    }
+
   }
 
-  visiblebutton(bool): void {
+  visibleButton(bool): void {
     this.visible = bool;
   }
 }

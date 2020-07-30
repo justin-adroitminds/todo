@@ -1,17 +1,28 @@
 const express = require('express')
 const http = require('http')
+const db = require('./dbconnect');
 
 const app = express()
+var router = new express.Router();
+
 const server = http.createServer(app)
+var bodyParser = require('body-parser'); 
+
+app.use(bodyParser.urlencoded({'extended':'true'}));            // parse application/x-www-form-urlencoded
+app.use(bodyParser.json());                                     // parse application/json
+app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
 
 app.use(express.static(__dirname + '/dist/my-todo-list'))
+app.use('/',router)
 
-app.get('/', (req,res)=>{
-    res.sendfile('./dist/my-todo-list/index.html')
-})
-const route = express.Router()
+db.connect(() => {
+    app.listen(process.env.PORT || 5555, function (){
+        console.log(`Listening`);
+    });
+});
 
-app.use('/',route)
+require('./routes/routes.js')(router);
+
 
 server.listen(3000, ()=>{
     console.log('server started')

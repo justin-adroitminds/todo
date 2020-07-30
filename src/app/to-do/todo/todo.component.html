@@ -1,130 +1,79 @@
-<style>
-    .box1 {
-      border: solid 1px #006699;
-      padding: 20px;
-      background: #f3f3f3;
-      border-radius: 5px;
-    }
-  
-    .todos input.textfield {
-      width: 480px;
-      height: 36px;
-      margin-right: 20px;
-      font-size: 1.4em;
-      vertical-align: top;
-    }
-  
-    .todos input.checkbox {
-      width: 20px;
-      height: 20px;
-    }
-  
-    .todos .checked {
-      text-decoration: line-through;
-    }
-  
-    .todos button {
-      height: 36px;
-      font-size: 1.1em;
-      vertical-align: top;
-      border: solid 1px #999;
-      border-radius: 2px;
-    }
-  
-    .todos .delete-icon {
-      display: inline-block;
-      cursor: pointer;
-      color: red;
-      text-align: right;
-    }
-    .display{
-      display: none;
-    }
-    .alignleft{
-      text-align: left;
-      padding-left: 0;
-    }
-    .centeralign{
-      text-align: right;
-      padding-right: 5px;
-    }
-    ul{
-      list-style-type:none;
-      padding: 0;
-    }
-    .paddingleft{
-      padding-left: 0;
-    }
-    .col-md-1 {
-      flex: 0 0 8.333333%;
-      max-width: 4%;
-  }
-  .btn-primary{
-    font-size: 1.1em;
-      vertical-align: top;
-      border: solid 1px #999;
-      border-radius: 16px !important;
-      height: auto !important;
-  }
-  hr{
-    border-top: 6px solid rgba(0, 0, 0, 0.1);
-  }
-  h2{
-    width: 18%;
-  }
-  </style>
-  <div class="container">
-    <h2 contenteditable>My List Name</h2>
-    <div class="todos">
-  
-      <div>
-      <form *ngIf="visible" (submit)="addTodo($event)">
-      <input [(ngModel)]="newTodo" (keyup.enter)="newTodo=''" class="textfield" name="newTodo" />
-        <button  type="submit" [disabled]="newTodo===''">Add Todo </button>
-      </form>
-      </div>
-      <ul>
-        <h4>{{completed}}/{{todos.length}} Items Completed</h4>
-      <li  class="col-md-12" [ngClass]="{'display': todo.completed}" *ngFor="let todo of todos; let i=index">
-        <div class="row">
-        <div class="col-md-1 centeralign">
-          <input type="checkbox" class="checkbox" (click)="updatecompleted(true)" [(ngModel)]="todo.completed" />
-        </div>
-      <div class="col-md-4 paddingleft">
-        <span class="alignleft" [ngClass]="{'checked': todo.completed}" > {{ todo.newTodo }} </span>
-      </div>
-      <div class="col-md-6">
-        <span (click)="deleteTodo(i)" class="delete-icon"> <i class="fa fa-times-circle-o" aria-hidden="true"></i>  </span>
-      </div>
-    </div>
-        </li>
-        <button type="button" (click)="visiblebutton(true)" class="btn btn-primary">Add New</button>
-        </ul>
-        <div class="row">
-          <div class="col-md-6">
-            <hr>
-          </div>
-          <div class="col-md-6">
-          </div>
-        </div>
+
+<mat-card class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Todo List App <button mat-raised-button color="primary" (click)="visibleButton(true)" >Add New</button></mat-card-title>
+    <mat-card-subtitle>manage todo list</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="container">
+      <md-content flex layout-padding>
+      <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+        <p>
+          <mat-card *ngIf="visible" class="box">
+            <mat-card-header>
+              <mat-card-title>Add Task</mat-card-title>
+            </mat-card-header>
         
-        
-        <ul>
-          <h4>Completed Tasks {{completed}}</h4>
-          <li  class="col-md-12" [ngClass]="{'display': !todo.completed}" *ngFor="let todo of todos; let i=index">
-            <div class="row">
-            <div class="col-md-1 centeralign">
-              <input type="checkbox" class="checkbox" (click)="updatecompleted(false)" [(ngModel)]="todo.completed" />
-            </div>
-          <div class="col-md-4 paddingleft">
-            <span class="alignleft" [ngClass]="{'checked': todo.completed}" > {{ todo.newTodo }} </span>
-          </div>
-          <div class="col-md-6">
-            <span (click)="deleteTodo(i)" class="delete-icon"> <i class="fa fa-times-circle-o" aria-hidden="true"></i> </span>
-          </div>
+            <form (submit)="addTodo($event)" class="example-form">
+              <mat-card-content>
+                <mat-form-field class="example-full-width">
+                  <input matInput type="text" name="newTodo"  [(ngModel)]="newTodo" (keyup.enter)="newTodo=''">
+                </mat-form-field>
+              </mat-card-content>
+              <button mat-raised-button color="primary" [disabled]="newTodo===''">Add Todo</button>
+            </form>
+          </mat-card>
+        </p>
         </div>
-            </li>
-          </ul>
-  
-    </div>
-  </div>
+      </md-content>
+      <md-content flex layout-padding>
+      <p class="example-full-width" fxLayout="row" fxLayoutAlign="center center">
+        <mat-card class="example-full-width">
+          <mat-card-content  class="example-full-width">
+            <section class="col-6"  fxLayout="row">
+              <mat-list role="list">
+                <h2 class="example-h2">{{completed}}/{{this.length}} Items Completed</h2>
+                <mat-list-item class="col-12" role="listitem" *ngFor="let todo of todos; let i=index" [ngClass]="{'hide': todo.completed}">
+                  <div fxLayout="row" fxFlexFill>
+                      <div fxFlex fxLayoutAlign="start center">
+                        <mat-checkbox [ngClass]="{'checked': todo.completed}" class="example-margin col-6" (click)="updateCompleted(i)" [(ngModel)]="todo.completed" >
+                          {{ todo.newTodo }}
+                        </mat-checkbox>
+                      </div>
+                     <div fxFlex  fxLayoutAlign="end center"></div>
+                     <button class="col-6" mat-icon-button (click)="deleteTodo(todo.id)">
+                      <mat-icon class="mat-24">delete</mat-icon>
+                    </button>
+                  </div>
+              </mat-list-item>
+              </mat-list>
+            </section>
+            <section class="col-6"  fxLayout="row">
+              <mat-list role="list">
+                <h2 class="example-h2">{{completed}} Items Completed</h2>
+                <mat-list-item role="listitem" *ngFor="let todo of todos; let i=index"  [ngClass]="{'hide': !todo.completed}">
+                  <div [ngClass]="{'display': !todo.completed}">
+                    <div fxLayout="row" fxFlexFill>
+                      <div fxFlex fxLayoutAlign="start center">
+                        <mat-checkbox [ngClass]="{'checked': todo.completed}" class="example-margin" (click)="updateCompleted(i)" [(ngModel)]="todo.completed" >
+                        {{ todo.newTodo }}
+                        </mat-checkbox>
+                      </div>
+                      <div fxFlex  fxLayoutAlign="end center"></div>
+                  <button mat-icon-button (click)="deleteTodo(todo.id)">
+                    <mat-icon class="mat-24">delete</mat-icon>
+                  </button>
+                  </div>
+                </div>
+              </mat-list-item>
+              </mat-list>
+            </section>
+
+          </mat-card-content>
+        </mat-card>
+      </p>
+    </md-content>
+      </div>
+  </mat-card-content>
+</mat-card>
